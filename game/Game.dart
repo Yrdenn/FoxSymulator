@@ -69,7 +69,8 @@ class Game {
               animal['speed'],
               animal['strengh'],
               animal['defence'],
-              animal['loot']));
+              animal['drop']["items"],
+              animal["drop"]["exp"]));
         }
       }
       for (var act in loc['actions']) {
@@ -158,11 +159,11 @@ class Game {
         ((hero.skill_points > 0
             ? ": ${Color.cyanBold('${hero.skill_points}')}"
             : ": ${hero.skill_points}"));
-    String nextlvl = fastStatsTranslate("{next_lvl}") + ": ${hero.nextLvl}";
+    String nextlvl = "${hero.nextLvl}";
 
     print('$name \t $location \t');
-    print('$lvl \t $nextlvl');
-    print('$exp \t $skill_points');
+    print('$lvl \t $exp/$nextlvl');
+    print('$skill_points');
     print('$hp \t $strengh \t $defence \t $speed');
     print('$satiety \t $energy');
     print('\n');
@@ -215,8 +216,6 @@ class Game {
     File(saveFilePath).writeAsStringSync(data);
     String bag = hero.getBagToSave();
     File(saveBagPath).writeAsStringSync(bag);
-    String worehouse = hero.getWarehouseToSave();
-    File(saveWorehousePath).writeAsStringSync(worehouse);
     clearConsole();
     print(Language.getTranslation(LanguagesTypes.OPTIONS, "{Game was saved}"));
     print(
@@ -230,9 +229,7 @@ class Game {
       String data = File(saveFilePath).readAsStringSync();
       hero = Fox.loadFromString(data);
       String bag = File(saveBagPath).readAsStringSync();
-      String worehouse = File(saveWorehousePath).readAsStringSync();
       hero.loadBagFromJson(bag);
-      hero.loadWorehouseFromJson(worehouse);
       return true;
     } else {
       return false;
